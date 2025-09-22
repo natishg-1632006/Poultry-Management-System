@@ -10,7 +10,7 @@ import About from "./components/About";
 import BatchDetails from "./components/BatchDetails";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { isAuthenticated, getStoredUser } from "./services/authService";
+import authService from "./services/authService";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -18,8 +18,8 @@ const App = () => {
 
   useEffect(() => {
     // Check if user is authenticated on app load
-    const storedUser = getStoredUser();
-    if (storedUser && isAuthenticated()) {
+    const storedUser = authService.getStoredUser();
+    if (storedUser && authService.isAuthenticated()) {
       setUser(storedUser);
     }
     setLoading(false);
@@ -45,7 +45,7 @@ const App = () => {
       );
     }
 
-    return isAuthenticated() ? children : <Navigate to="/login" replace />;
+    return authService.isAuthenticated() ? children : <Navigate to="/login" replace />;
   };
 
   // Public Route component (redirects to dashboard if already authenticated)
@@ -60,7 +60,7 @@ const App = () => {
       );
     }
 
-    return !isAuthenticated() ? children : <Navigate to="/dashboard" replace />;
+    return !authService.isAuthenticated() ? children : <Navigate to="/dashboard" replace />;
   };
 
   return (
